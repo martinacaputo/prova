@@ -1,0 +1,217 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+#ch{
+  margin-top: 10px;
+}
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+td .data{
+  padding-bottom: 1px;
+  margin-bottom: 1px;
+  
+}
+#content{
+  width: 100%;
+  float: right;
+  padding-left: 50px;
+  padding-top: 40px;
+  padding-right: 50px;
+  overflow-y:scroll;
+  max-height: 500px;
+  max-width: 1425px;
+  margin-left:100px;
+  border: 1px solid lightgrey;
+  border-collapse: collapse;
+  border-radius: 10px;
+
+}
+#mat{
+  margin-left:100px;
+}
+#cont{
+  width: 1425px;
+  height: auto;
+  padding-left: 100px;
+}
+th{
+  font-weight: 500;
+}
+.tit{
+  font-weight: 500px;
+  font-size: 35px;
+  margin-left: 100px;
+  margin-top: 40px;
+}
+.tit1{
+  font-weight: 500px;
+  font-size: 35px;
+  margin-left: 100px;
+  padding-top: 20px;
+  margin-top: 520px;
+}
+#formm{
+  background-color:rgb(148, 182, 216);
+  border-radius: 3px;
+  width: 70%;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+#head{
+  width: 100%;
+}
+#add{
+  margin-top: 0px;
+  border-top: 0px;
+  margin-right: 160px;
+  margin-bottom: 20px;
+}
+
+#but{
+  margin-left: 20px;
+}
+.container{
+  background-color: mediumblue;
+  padding: 15px;
+  position: relative;
+  width: 100%;
+}
+
+#testo{
+  color: white;
+  margin-left: 10px;
+  font-size: 20px;
+}
+.form-check{
+  margin-top:5px;
+}
+
+.form-check-label{
+  font-size: 25px;
+  font-weight: lighter;
+}
+.form-label{
+  font-size: 25px;
+    font-weight: lighter
+}
+.bi-collection-play{
+  color: white;
+}
+
+.bi-person-circle{
+  color:gray;
+  float: right;
+}
+
+#wrapper{
+  margin-left: 108px;
+  margin-right: 108px;
+  height: 600px;
+}
+
+
+
+
+
+svg{
+  cursor: pointer;
+}
+#formm{
+  background-color:rgb(148, 182, 216);
+  border-radius: 3px;
+  width: 70%;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+
+
+
+.red{
+  color: red;
+}
+.btn{
+  margin-top: 5px;
+  margin-right: 3px;
+}
+
+.data{
+  font-size: small;
+}
+
+.bi-plus-circle-fill{
+  color:blue;
+  float:right;
+  margin-top: 60px;
+  margin-right: 10px;
+}

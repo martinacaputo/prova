@@ -50,7 +50,6 @@
   }
 
   function deleteCourse(codiceCorso) {
-    // call: DELETE /api/films/:id
     return new Promise((resolve, reject) => {
       fetch(new URL('pianodistudi/' + codiceCorso, APIURL), {
         method: 'DELETE',
@@ -89,7 +88,6 @@
     });
   }
   function deleteAll() {
-    // call: DELETE /api/films/:id
     return new Promise((resolve, reject) => {
       fetch(new URL('pianodistudi/', APIURL), {
         method: 'DELETE',
@@ -108,7 +106,6 @@
   }
 
   function addCourse(codiceCorso) {
-    // call: POST /api/films
     return new Promise((resolve, reject) => {
       fetch(new URL('pianodistudi', APIURL), {
         method: 'POST',

@@ -229,7 +229,7 @@ app.put('/api/studenti/:id', async (req, res) => {
       await userDao.updateUser(user);
       res.status(200).end();
     } catch(err) {
-      res.status(503).json({error: `Database error during the update of film ${req.params.id}.`});
+      res.status(503).json({error: `Database error during the update of user.`});
     }
   
   });

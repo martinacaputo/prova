@@ -39,7 +39,7 @@ exports.getUserById = (id) => {
     });
   };
   
-  // update an existing films
+
 exports.updateUser = (user) => {
   return new Promise((resolve, reject) => {
     const sql = 'UPDATE studenti SET fulltime=? WHERE matricola = ?';

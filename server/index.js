@@ -137,7 +137,7 @@ app.get('/api/pianodistudi',isLoggedIn, async (req, res) => {
 app.get('/api/creditistudente', isLoggedIn, async (req, res) => {
     try {
       const result = await dao.creditsStudent(req.user.matricola);
-      if(result.error)
+      if(result==0)
         res.status(404).json(result);
       else
         res.json(result);
@@ -174,7 +174,11 @@ app.delete('/api/pianodistudi/:codiceCorso',isLoggedIn, async (req, res) => {
   // DELETE /api/pianodistudi
 app.delete('/api/pianodistudi',isLoggedIn, async (req, res) => {
   try {
+    const ps=await dao.listStudyPlan(req.user.matricola);
     await dao.deleteAll(req.user.matricola);
+    for(const c of ps){
+      await dao.updateCourse(c);
+    }
     res.status(204).end();
   } catch(err) {
     res.status(503).json({ error: `Database error during the deletion of Courses.`});
@@ -299,9 +303,9 @@ app.post('/api/sessions', function(req, res, next) {
   
   // GET /sessions/current
   // check whether the user is logged in or not
-  app.get('/api/sessions/current', async (req, res) => {  if(req.isAuthenticated()) {
-    const user = await userDao.getUserById(req.user.matricola)
-    res.status(200).json(user);}
+  app.get('/api/sessions/current', (req, res) => {  if(req.isAuthenticated()) {
+    
+    res.status(200).json(req.user);}
   else
     res.status(401).json({error: 'Unauthenticated user!'});;
   });

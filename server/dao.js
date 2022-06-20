@@ -138,8 +138,9 @@ exports.deleteAll = (studente) => {
 
 exports.updateCourse =(course) => {
   return new Promise((resolve, reject) => {
-    const sql = 'UPDATE corsi SET postioccupati=? WHERE codice=?';
-    db.run(sql, [course.postioccupati, course.codice], function (err) {
+    const sql = 'UPDATE corsi SET postioccupati=(SELECT COUNT (*) FROM pianodistudi WHERE corso=?) WHERE codice=?';
+    
+    db.run(sql, [course.codice, course.codice], function (err) {
       if (err) {
         reject(err);
         return;

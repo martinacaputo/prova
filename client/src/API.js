@@ -139,7 +139,7 @@
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ matricola:studente.matricola, email:studente.email, nome:studente.nome, fulltime:studente.fulltime  }),
+        body: JSON.stringify({ matricola:studente.matricola, email:studente.email, nome:studente.nome, fulltime:fulltime  }),
       }).then((response) => {
         if (response.ok) {
           resolve(null);

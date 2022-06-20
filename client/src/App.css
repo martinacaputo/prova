@@ -96,6 +96,13 @@ td .data{
   border-radius: 10px;
 
 }
+.hd{
+  background-color:rgb(26, 134, 187);
+  height: 60px;
+}
+#inc{
+  background-color:aliceblue;
+}
 #mat{
   margin-left:100px;
 }
@@ -120,12 +127,15 @@ th{
   padding-top: 20px;
   margin-top: 520px;
 }
-#formm{
-  background-color:rgb(148, 182, 216);
-  border-radius: 3px;
-  width: 70%;
-  margin-top: 20px;
+#ok{
+  background-color:rgb(234, 234, 234);
+  border-radius: 10px;
+  width: 80%;
+  height: 350px;
+  margin-top: 60px;
   padding-bottom: 20px;
+  box-shadow: 10px 10px 5px #dedede;
+
 }
 #head{
   width: 100%;

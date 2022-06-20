@@ -41,16 +41,17 @@ function App2() {
       }
     };
     checkAuth();
-  }, [dirty]);
+  }, []);
 
   useEffect(() => {
-    if(loggedIn)
+    if(loggedIn){
       API.getStudyPlan()
         .then( (studyPlan) => {setStudyPlan(studyPlan); } )
         .catch( err => handleError(err));
         API.getCreditsStudent()
         .then( (e) => {setCrediti(e); } )
         .catch( err => handleError(err));
+    }
   }, [loggedIn])
 
   
@@ -150,6 +151,7 @@ const doLogOut = async () => {
   setLoggedIn(false);
   setUser({});
   setStudyPlan([]);
+  azzeraCrediti();
 }
 
 

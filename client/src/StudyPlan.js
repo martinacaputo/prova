@@ -127,13 +127,10 @@ const navigate = useNavigate();
               <th>Codice</th>
               <th>Nome</th>
               <th>Crediti</th>
-              <th>studenti iscritti</th>
-              <th>massimo numero di iscritti</th>
+              <th></th>
+              <th></th>
               </tr></thead>
                 <tbody id="tab">
-             
-                
-                  
 
                    { props.studyPlan.map((f,idx) => <CourseRow key={idx} edit={props.edit} corso={f} updatePostiOccupati={props.updatePostiOccupati} studyPlan={props.studyPlan} deleteCourse={props.deleteCourse}/>)}
                  
@@ -182,8 +179,8 @@ const navigate = useNavigate();
               <th>{props.corso.codice}</th>
                 <td>{props.corso.nome}</td>
                 <td>{props.corso.crediti}</td>    
-                <td>{props.corso.postioccupati}</td>
-                <td>{props.corso.maxstudenti}</td>
+                <td></td>
+                <td></td>
                 {(props.edit==true && !contrProp())?
                   <td title="Rimuovi corso" >
                     <svg  onClick={() => { props.deleteCourse(props.corso);  props.updatePostiOccupati(props.corso,false); }} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-trash3" viewBox="0 0 16 16">

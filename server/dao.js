@@ -11,7 +11,7 @@ const db = new sqlite.Database('exams.sqlite', (err) => {
 // get all courses
 exports.listCourses = () => {
     return new Promise((resolve, reject) => {
-      const sql = 'SELECT * FROM corsi ORDER BY nome';
+      const sql = 'SELECT codice,nome,crediti,(SELECT COUNT (*) FROM pianodistudi WHERE corso=codice) as postioccupati,maxstudenti,propedeuticita FROM corsi ORDER BY nome';
       db.all(sql, [], (err, rows) => {
         if (err) {
           reject(err);

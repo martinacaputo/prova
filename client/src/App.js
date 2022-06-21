@@ -103,7 +103,7 @@ function App2() {
 function updateFullTime(fulltime){
   let user1={matricola:user.matricola,email:user.email,nome:user.nome,fulltime:fulltime}
 setUser(user1);
-console.log(fulltime)
+
 API.updateFullTime(user,fulltime)
     .then( () => {setDirty(true); setUser(user1); })
     .catch( err => handleError(err) );

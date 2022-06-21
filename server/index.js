@@ -153,6 +153,8 @@ app.post('/api/pianodistudi',isLoggedIn, async (req, res) => {
     if (!errors.isEmpty()) {
       return res.status(422).json({errors: errors.array()});
     }
+    
+
     try {
       await dao.insertCourse(req.body.codice,req.user.matricola);
       res.status(201).end();
@@ -196,6 +198,7 @@ app.get('/api/studenti', async (req, res) => {
     res.status(500).json({ error: `Database error while retrieving students .`}).end();
   }
   });
+
 // GET /api/studenti/:id
 app.get('/api/studenti/:id', async (req, res) => {
   try {
@@ -234,17 +237,9 @@ app.put('/api/studenti/:id', async (req, res) => {
   
   });
 
-  app.put('/api/studenti/?id=id&fulltime=fulltime', async (req, res) => {
-    try {
-     
-      await userDao.updateFullTime(req.params.id,req.params.fulltime);
-      res.status(200).end();
-    } catch(err) {
-      res.status(503).json({error: `Database error during the update of fulltime`});
-    }
-  });
-// PUT /api/studenti<id>
-app.put('/api/corsi/:id', async (req, res) => {
+  
+
+app.put('/api/corsi/:id',async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({errors: errors.array()});
@@ -258,8 +253,7 @@ app.put('/api/corsi/:id', async (req, res) => {
     maxstudenti: req.body.maxstudenti,
     propedeuticita:req.body.propedeuticita
   };
-
-  // you can also check here if the code passed in the URL matches with the code in req.body
+  
   try {
     await dao.updateCourse(course);
     res.status(200).end();

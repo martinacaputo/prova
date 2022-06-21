@@ -52,19 +52,7 @@ exports.updateUser = (user) => {
     });
   });
 };
-  //update full or part time
-  exports.updateFullTime = (matricola,fulltime) => {
-    return new Promise((resolve, reject) => {
-      const sql = 'UPDATE studenti SET fulltime=? WHERE matricola=?';
-      db.run(sql, [fulltime, matricola], function (err) {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(this.lastID);
-      });
-    });
-  };
+
 exports.getUser = (email, password) => {
     return new Promise((resolve, reject) => {
       const sql = 'SELECT * FROM studenti WHERE email = ?';

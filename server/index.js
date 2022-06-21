@@ -182,22 +182,10 @@ app.post('/api/pianodistudi',isLoggedIn, async (req, res) => {
       }
     }
   }
-    if( contr===1){
+    if( contr==1){
       return res.status(422).json({error: 'Presenza di corsi incompatibili, vincolo violato'});
     }
-    contr=0;
-    //controllo propedeuticità
-    if(corsoToInsert.propedeuticita){
-      for (const corso of ps){
-        if(corsoToInsert.propedeuticita==corso.codice){
-          contr=0;
-          break;
-        }else contr=1;
-      }
-    }
-    if( contr===1){
-      return res.status(422).json({error: 'Manca corso propedeutico, vincolo violato'});
-    }
+   
     //controllo che per quel corso non si sia superato il limite di studenti
     if(corsoToInsert.maxstudenti && corsoToInsert.postioccupati>corsoToInsert.maxstudenti){
       return res.status(422).json({error: 'Raggiunto limite studenti'});

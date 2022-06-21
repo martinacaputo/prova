@@ -2,7 +2,6 @@
  * All the API calls
  */
 
- const dayjs = require("dayjs");
  const APIURL = new URL('http://localhost:3008/api/');  // Do not forget '/' at the end
 
  async function getAllCourses() {

@@ -1,5 +1,5 @@
-import { Container, Row, Col, Table, Button,Form, Alert } from 'react-bootstrap';
-import { LoginForm, LogoutButton } from './LoginComponents';
+import { Row, Col, Table } from 'react-bootstrap';
+import {  LogoutButton } from './LoginComponents';
 import { useState } from 'react';
 import './App.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -84,12 +84,12 @@ function Courses(props) {
     const [showProp, setShowProp]=useState(false);
     
     function Isincompatibile(corso){
-      if(props.add==true){
+      if(props.add===true){
       for (let i=0;i<props.studyPlan.length;i++){
             for(let j=0;j<props.courses.length;j++){
               if(props.courses[j].codice===corso.codice){
                 for(let k=0;k<props.courses[j].incomp.length;k++){
-                 if(props.courses[j].incomp[k].codice==props.studyPlan[i].codice){
+                 if(props.courses[j].incomp[k].codice===props.studyPlan[i].codice){
                     return true;
                   }
                 }
@@ -101,12 +101,12 @@ function Courses(props) {
       return false;
     }
     function incompatibileC(corso){
-      if(props.add==true){
+      if(props.add===true){
       for (let i=0;i<props.studyPlan.length;i++){
             for(let j=0;j<props.courses.length;j++){
               if(props.courses[j].codice===corso.codice){
                 for(let k=0;k<props.courses[j].incomp.length;k++){
-                 if(props.courses[j].incomp[k].codice==props.studyPlan[i].codice){
+                 if(props.courses[j].incomp[k].codice===props.studyPlan[i].codice){
                     return props.studyPlan[i].nome;
                   }
                 }
@@ -119,9 +119,9 @@ function Courses(props) {
     }
 
     function IsAlreadyIn(corso){
-      if(props.add==true){
+      if(props.add===true){
       for (let i=0;i<props.studyPlan.length;i++){
-        if(corso.codice==props.studyPlan[i].codice){
+        if(corso.codice===props.studyPlan[i].codice){
           return true;
         }
             
@@ -133,7 +133,7 @@ function Courses(props) {
     function contrProped(corso){
       if(corso.prop.codice){
         for(let c of props.studyPlan){
-            if(c.codice==corso.prop.codice){          
+            if(c.codice===corso.prop.codice){          
               return true;
             }
         }
@@ -148,19 +148,20 @@ function Courses(props) {
       return false;
     }
     function contr(corso){
-      if(props.add==true && contrProped(props.corso) && props.edit==true && !Isincompatibile(props.corso) && !IsAlreadyIn(props.corso) && !corsoFull(props.corso)){
+      if(props.add===true && contrProped(props.corso) && props.edit===true && !Isincompatibile(props.corso) && !IsAlreadyIn(props.corso) && !corsoFull(props.corso)){
         return 1;
       }
-      if(corsoFull(props.corso) && props.edit==true ){
-        return 6;
-      }
-      if(!contrProped(props.corso) && props.edit==true){
-        return 4;
-      }
-      if(IsAlreadyIn(props.corso) && props.edit==true ){
+      if(IsAlreadyIn(props.corso) && props.edit===true ){
         return 2;
       }
-      if(Isincompatibile(props.corso) && props.edit==true ){
+      if(corsoFull(props.corso) && props.edit===true ){
+        return 6;
+      }
+      if(!contrProped(props.corso) && props.edit===true){
+        return 4;
+      }
+      
+      if(Isincompatibile(props.corso) && props.edit===true ){
         return 3;
       }
        else return 5;
@@ -190,7 +191,7 @@ function Courses(props) {
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
 </svg>
 </td>
-            { contr(props.corso)==1 &&
+            { contr(props.corso)===1 &&
               <td title='Aggiungi corso'>
                <svg onClick={()=>{
                
@@ -203,25 +204,25 @@ function Courses(props) {
 </svg> 
                 </td>
               }
-            { contr(props.corso)==2 &&
+            { contr(props.corso)===2 &&
               <td title="Corso già inserito" ><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check-circle" viewBox="0 0 16 16">
               <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
               <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
             </svg></td>
               }
-            { contr(props.corso)==3 &&
+            { contr(props.corso)===3 &&
               <td title= {'Incompatibile con '+incompatibileC(props.corso)} ><svg xmlns="http://www.w3.org/2000/svg"  width="25" height="25" fill="red" id="x" className="bi bi-x-circle" viewBox="0 0 16 16">
               <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
               <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
             </svg></td>
               }
-            { contr(props.corso)==4 &&
+            { contr(props.corso)===4 &&
               <td title= {'Manca corso propedeutico:\n '+props.corso.prop.nome} ><svg xmlns="http://www.w3.org/2000/svg"  width="25" height="25" fill="blue" id="x" className="bi bi-x-circle" viewBox="0 0 16 16">
               <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
               <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
             </svg></td>
               } 
-              { contr(props.corso)==6 &&
+              { contr(props.corso)===6 &&
               <td title= {'Non ci sono posti disponibili\n per questo corso'} ><svg xmlns="http://www.w3.org/2000/svg"  width="25" height="25" fill="red" id="x" className="bi bi-x-circle" viewBox="0 0 16 16">
               <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
               <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
@@ -232,11 +233,11 @@ function Courses(props) {
             
         </tr>
        
-        { showProp && props.corso.prop.codice!=undefined ? 
+        { showProp && props.corso.prop.codice!==undefined ? 
                   <tr className="tr" id="inc">
-                  <CourseRowIncomp corso={props.corso.prop} incomp={'Propedeutico'}/> 
+                  <CourseRowIncomp key={props.corso.codice} corso={props.corso.prop} incomp={'Propedeutico'}/> 
                   </tr>
-                : (showProp && props.corso.prop.codice==undefined && props.corso.incomp.length==0)? <tr id="inc"><CourseRowIncomp  incomp={'Nessun vincolo'}/></tr>: ''
+                : (showProp && props.corso.prop.codice===undefined && props.corso.incomp.length===0)? <tr id="inc"><CourseRowIncomp key={props.corso.codice}  incomp={'Nessun vincolo'}/></tr>: ''
           }
 
          { show?       props.corso.incomp.map((f,idx) =>
@@ -256,7 +257,7 @@ function Courses(props) {
   function CourseRowIncomp(props){
     return (
         <>
-        {props.incomp!='Nessun vincolo' ?
+        {props.incomp!=='Nessun vincolo' ?
          <><th>{props.incomp}</th>
           <td>{props.corso.codice}</td>
             <td>{props.corso.nome}</td>

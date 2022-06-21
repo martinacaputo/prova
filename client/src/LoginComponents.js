@@ -45,8 +45,8 @@ function LoginForm(props) {
                           <Form.Label>Password</Form.Label>
                           <Form.Control type='password' value={password} onChange={ev => setPassword(ev.target.value)} />
                       </Form.Group>
-                      <Button type="button" class="btn btn-light" onClick={handleSubmit}>Login</Button>
-                      <Button type="button" class="btn btn-light" onClick={()=>navigate('/')}>Torna ai corsi</Button>
+                      <Button type="button" className="btn btn-light" onClick={handleSubmit}>Login</Button>
+                      <Button type="button" className="btn btn-light" onClick={()=>navigate('/')}>Torna ai corsi</Button>
                   </Form>
               </Col>
           </Row>

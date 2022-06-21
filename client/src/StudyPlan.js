@@ -1,8 +1,7 @@
-import { Container, Row, Col, Table, Button,Form,Alert } from 'react-bootstrap';
+import {  Table, Button,Form,Alert } from 'react-bootstrap';
 import { useState } from 'react';
 import './App.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { Navigate, useNavigate } from 'react-router-dom';
 import API from './API';
 import {Courses} from './CourseTable';
 export { StudyPlan }
@@ -31,26 +30,73 @@ function StudyPlan(props) {
   }
 const handleSubmit =async (event)=>{
   event.preventDefault();
-  if (ft==1 && props.crediti>80){
+
+  //controllo che non sfori il range dei crediti
+  if (ft===1 && props.crediti>80){
     setErrorMsg('Superato il numero limite di crediti, eliminare corsi per continuare');
   }else
-  if(ft==1 && props.crediti<60){
+  if(ft===1 && props.crediti<60){
         setErrorMsg('Il numero minimo di crediti è 60, aggiungere corsi al piano di studi');
   }else
-  if (ft==0 && props.crediti>40){
+  if (ft===0 && props.crediti>40){
     setErrorMsg('Superato il numero limite di crediti, eliminare corsi per continuare');
   }else
-  if(ft==0 && props.crediti<20){
+  if(ft===0 && props.crediti<20){
         setErrorMsg('Il numero minimo di crediti è 20, aggiungere corsi al piano di studi');
   }else{
+    
+   //controllo propedeuticità
+ let contr=0;
+  for (const corso of props.studyPlan){
+    if(corso.propedeuticita){
+      for(const c of props.studyPlan){
+        if(c.codice===corso.propedeuticita){
+          contr=0;
+          break;
+        }else contr=1;
+      }
+    }
+  }
+  if( contr===1){
+    setErrorMsg('Manca corso Propedeutico');
+  }else{
+    
+
+  //controllo incompatibilità
+  contr=0;
+  for (const corso of props.studyPlan){
+    for(const corso1 of props.studyPlan){
+      for(const c of props.courses){
+        if(corso1.codice===c.codice){
+          for(const inc of c.incomp){
+              if(inc.codice===corso.codice){
+                contr=1;
+                break;
+              }
+          }
+        }
+      }
+    }
+  }
+  if( contr===1){
+    setErrorMsg('Presenza di corsi incompatibili, eliminare');
+  }else{
+      //controllo che non si sia superato il limite di studenti
+  contr=0;
+  for (const corso of props.studyPlan){
+    if(corso.maxstudenti && corso.postioccupati>corso.maxstudenti){
+      contr=1;
+      break;
+    }
+  }
+  if( contr===1){
+    setErrorMsg('Raggiunto limite studenti');
+  }else{
     setErrorMsg('');
-   
-   
+
+
 
   await API.deleteAll();
-
- 
-
   for (const corso of props.studyPlan){
     await API.addCourse(corso.codice);
   }
@@ -58,7 +104,10 @@ const handleSubmit =async (event)=>{
     await API.updateCourse(c);
   }
   setEdit(false);
-}
+        }
+      }
+    }
+  }
 }
 async function deleteAllSP() {
  
@@ -74,7 +123,7 @@ async function deleteAllSP() {
 
   }
 }
-const navigate = useNavigate();
+
 
       return (
         <>
@@ -84,13 +133,13 @@ const navigate = useNavigate();
       <h5>  
       
       
-        {((ft === 1 && edit==true) ||(ft === 1 && props.studyPlan.length!=0) ) ?  
-        <p id="mat">Crediti: min 60 max 80</p> :(edit==true || props.studyPlan.length!=0)?
+        {((ft === 1 && edit===true) ||(ft === 1 && props.studyPlan.length!==0) ) ?  
+        <p id="mat">Crediti: min 60 max 80</p> :(edit===true || props.studyPlan.length!==0)?
         <p id="mat">Crediti: min 20 max 40</p>:''
       }
       
       </h5>
-      {edit==true?
+      {edit===true?
       <>
       <Form onSubmit={handleSubmit}>
       {errorMsg ? <Alert variant='danger' onClose={() => setErrorMsg('')} dismissible>{errorMsg}</Alert> : false}
@@ -120,7 +169,7 @@ const navigate = useNavigate();
         {props.studyPlan.length!==0 && <h2 id="mat">Crediti {props.crediti} </h2> }
 
           <div id="cont">
-          {props.studyPlan.length!=0 ?
+          {props.studyPlan.length!==0 ?
             <div id="content">
               <Table>
               <thead><tr>
@@ -139,11 +188,11 @@ const navigate = useNavigate();
               </Table>
             </div>:
             <>
-            {props.studyPlan.length===0 && props.edit==false && <><h3>Crea il tuo piano di studi</h3><h4>Scegli opzione:</h4></>}
+            {props.studyPlan.length===0 && props.edit===false && <><h3>Crea il tuo piano di studi</h3><h4>Scegli opzione:</h4></>}
 
-            {(props.ft === 1 && props.edit==false && props.studyPlan.length===0) ?
+            {(props.ft === 1 && props.edit===false && props.studyPlan.length===0) ?
         
-        <><input type="checkbox" onChange={() => { props.setFt1(0);   props.updateFullTime(0);}} className="input" checked />fulltime <p>Crediti: min 60 max 80</p> </> :(props.edit==false  && props.studyPlan.length===0)?
+        <><input type="checkbox" onChange={() => { props.setFt1(0);   props.updateFullTime(0);}} className="input" checked />fulltime <p>Crediti: min 60 max 80</p> </> :(props.edit===false  && props.studyPlan.length===0)?
     
         <><input type="checkbox" onChange={() => { props.setFt1(1);   props.updateFullTime(1);}} className="input" />fulltime  <p>Crediti: min 20 max 40</p> </>:''
     }
@@ -159,7 +208,7 @@ const navigate = useNavigate();
 
           function contrProp(){
             for(const c of props.studyPlan){
-              if( c.propedeuticita==props.corso.codice){
+              if( c.propedeuticita===props.corso.codice){
                 return true;
               }
             }
@@ -167,7 +216,7 @@ const navigate = useNavigate();
           }
           function corsoProp(){
             for(const c of props.studyPlan){
-              if( c.propedeuticita==props.corso.codice){
+              if( c.propedeuticita===props.corso.codice){
                 return c.nome;
               }
             }
@@ -181,12 +230,12 @@ const navigate = useNavigate();
                 <td>{props.corso.crediti}</td>    
                 <td></td>
                 <td></td>
-                {(props.edit==true && !contrProp())?
+                {(props.edit===true && !contrProp())?
                   <td title="Rimuovi corso" >
                     <svg  onClick={() => { props.deleteCourse(props.corso);  props.updatePostiOccupati(props.corso,false); }} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-trash3" viewBox="0 0 16 16">
   <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
 </svg></td> 
-                  : (props.edit==true && contrProp())? <td title= {'Non puoi eliminare questo corso\n perchè è propedeutico per '+corsoProp()} ><svg xmlns="http://www.w3.org/2000/svg"  width="25" height="25" fill="red" id="x" className="bi bi-x-circle" viewBox="0 0 16 16">
+                  : (props.edit===true && contrProp())? <td title= {'Non puoi eliminare questo corso\n perchè è propedeutico per '+corsoProp()} ><svg xmlns="http://www.w3.org/2000/svg"  width="25" height="25" fill="red" id="x" className="bi bi-x-circle" viewBox="0 0 16 16">
                   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                   <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                 </svg></td>:''

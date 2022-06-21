@@ -77,7 +77,6 @@ function App2() {
   }
   function suppxcancelC(corsi){
     setCourses(corsi);
-    console.log(courses);
   }
 
   function azzeraStudyPlan(){

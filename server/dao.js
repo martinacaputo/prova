@@ -127,7 +127,6 @@ exports.deleteAll = (studente) => {
     const sql = 'DELETE FROM pianodistudi WHERE studente = ? ';
     db.run(sql, [studente], (err) => {
       if (err) {
-        console.log(err);
         reject(err);
         return;
       } else

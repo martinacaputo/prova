@@ -94,7 +94,7 @@ app.get('/api/corsi', async (req, res) => {
   });
   
 
-  // GET /api/corsi
+  // GET /api/corsi/:id
 app.get('/api/corsi/:id', async (req, res) => {
   try {
     const corso = await dao.getACourse();
@@ -105,7 +105,7 @@ app.get('/api/corsi/:id', async (req, res) => {
   }
   });
 
-// GET /api/incompatibilita
+// GET /api/incompatibilita/:codiceCorso
 app.get('/api/incompatibilita/:codiceCorso', async (req, res) => {
     try {
       const result = await dao.listIncompatibility(req.params.codiceCorso);
@@ -153,7 +153,61 @@ app.post('/api/pianodistudi',isLoggedIn, async (req, res) => {
     if (!errors.isEmpty()) {
       return res.status(422).json({errors: errors.array()});
     }
-    
+    const ps=await dao.listStudyPlan(req.user.matricola);
+    const corsi = await dao.listCourses();
+    const crediti = await dao.creditsStudent(req.user.matricola);
+    for (const corso of corsi){
+      corso.incomp = await dao.listIncompatibility(corso.codice);
+      corso.prop = await dao.getACourse(corso.propedeuticita);
+    }
+    const ft=req.user.fulltime;
+    const corsoToInsert= await dao.getACourse(req.body.codice);
+    corsoToInsert.incomp=  await dao.listIncompatibility(req.body.codice);
+
+    //controllo che non sfori il range dei crediti
+  if (ft==1 && crediti+corsoToInsert.crediti>80){
+    return res.status(422).json({error: 'Superato il numero limite di crediti, vincolo violato'});
+  }
+
+  if (ft==0 && crediti+corsoToInsert.crediti>40){
+    return res.status(422).json({error: 'Superato il numero limite di crediti, vincolo violato'});
+  }
+       //controllo incompatibilità
+  let contr=0;
+  for (const corso of corsoToInsert.incomp){
+    for(const c in ps){
+      if(c.codice==corso.codice){
+        contr=1;
+        break;
+      }
+    }
+  }
+    if( contr===1){
+      return res.status(422).json({error: 'Presenza di corsi incompatibili, vincolo violato'});
+    }
+    contr=0;
+    //controllo propedeuticità
+    if(corsoToInsert.propedeuticita){
+      for (const corso of ps){
+        if(corsoToInsert.propedeuticita==corso.codice){
+          contr=0;
+          break;
+        }else contr=1;
+      }
+    }
+    if( contr===1){
+      return res.status(422).json({error: 'Manca corso propedeutico, vincolo violato'});
+    }
+    //controllo che per quel corso non si sia superato il limite di studenti
+    if(corsoToInsert.maxstudenti && corsoToInsert.postioccupati>corsoToInsert.maxstudenti){
+      return res.status(422).json({error: 'Raggiunto limite studenti'});
+    }
+    //controllo corso già presente in piano di studi
+    for(const c of ps){
+      if(c.codice==corsoToInsert.codice){
+        return res.status(422).json({error: 'Corso già presente'});
+      }
+    }
 
     try {
       await dao.insertCourse(req.body.codice,req.user.matricola);
@@ -163,9 +217,32 @@ app.post('/api/pianodistudi',isLoggedIn, async (req, res) => {
     }
   });
 
-// DELETE /api/pianodistudi
+// DELETE /api/pianodistudi/:codiceCorso
 app.delete('/api/pianodistudi/:codiceCorso',isLoggedIn, async (req, res) => {
-    try {
+
+  const ps=await dao.listStudyPlan(req.user.matricola);
+  const corsi = await dao.listCourses();
+  const crediti = await dao.creditsStudent(req.user.matricola);
+  const ft=req.user.fulltime;
+  const corsoToDelete= await dao.getACourse(req.params.codiceCorso);
+
+  //controllo vincolo crediti studente
+  if(ft==1 && crediti-corsoToDelete.crediti<60){
+    return res.status(422).json({error: 'Crediti inferiori alla soglia minima,vincolo violato'});
+  }
+  if(ft==0 && crediti-corsoToDelete.crediti<20){
+    return res.status(422).json({error: 'Crediti inferiori alla soglia minima,vincolo violato'});
+  }
+
+  //controllo vincolo propedeuticità
+  for(const c in ps){
+    if(c.propedeuticita==corsoToDelete.codice){
+      return res.status(422).json({error: `Non è possibile eliminare il corso ${corsoToDelete.codice} il corso perchè è propedeutico per ${c.codice}`});
+    }
+  }
+
+
+  try {
       await dao.deleteCourse(req.params.codiceCorso,req.user.matricola);
       res.status(204).end();
     } catch(err) {
@@ -212,7 +289,8 @@ app.get('/api/studenti/:id', async (req, res) => {
     res.status(500).json({ error: `Database error while retrieving student.`}).end();
   }
 });
-// PUT /api/studenti<id>
+
+// PUT /api/studenti/:id
 
 app.put('/api/studenti/:id', async (req, res) => {
     const errors = validationResult(req);
@@ -225,7 +303,6 @@ app.put('/api/studenti/:id', async (req, res) => {
       nome: req.user.nome,
       fulltime: req.body.fulltime
     };
-    console.log(user) 
 
     // you can also check here if the code passed in the URL matches with the code in req.body
     try {
@@ -258,7 +335,7 @@ app.put('/api/corsi/:id',async (req, res) => {
     await dao.updateCourse(course);
     res.status(200).end();
   } catch(err) {
-    res.status(503).json({error: `Database error during the update of course ${req.params.id}.`});
+    res.status(503).json({error: `Database error during the update of course`});
   }
 
 });
